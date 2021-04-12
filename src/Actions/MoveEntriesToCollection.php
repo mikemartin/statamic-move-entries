@@ -23,11 +23,9 @@ class MoveEntriesToCollection extends Action
 
         /** @var \Illuminate\Support\Collection $items */
         $items->each(function (Entry $item) use ($collection, $targetDir) {
-            ray($item->path(), $targetDir . '/' . pathinfo($item->path(), PATHINFO_BASENAME));
-            File::move(
-                $item->path(),
-                $targetDir . '/' . pathinfo($item->path(), PATHINFO_BASENAME)
-            );
+            if (File::isDirectory($targetDir) && File::isWritable($targetDir)) {
+                File::move($item->path(), $targetDir . '/' . pathinfo($item->path(), PATHINFO_BASENAME));
+            }
         });
     }
 
